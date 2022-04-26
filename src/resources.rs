@@ -3,7 +3,6 @@ use std::error::Error;
 use aws_sdk_s3::Client;
 use aws_sdk_s3::types::ByteStream;
 use aws_config::meta::region::RegionProviderChain;
-use serde_json::Deserializer;
 
 const BUCKET: &str = "cce-resources";
 const TICKERS_FILE: &str = "tickers.json";
