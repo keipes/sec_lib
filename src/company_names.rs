@@ -1,9 +1,5 @@
 use std::collections::HashMap;
-// use std::collections::HashMap;
-use std::str::from_utf8;
-use futures_util::Stream;
-use futures_util::StreamExt;
-use reqwest::{Error, Response};
+use reqwest::{Response};
 
 pub async fn request_lookup_data() -> Result<Response, Box<dyn std::error::Error>> {
     Ok(crate::http_client()?

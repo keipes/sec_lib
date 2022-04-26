@@ -1,8 +1,6 @@
 use std::collections::HashMap;
-use std::str::from_utf8;
-use futures_util::StreamExt;
 use reqwest::{Response};
-use log::{info, warn, error};
+use log;
 
 const _SEC_TICKER_URL: &str = "https://www.sec.gov/include/ticker.txt";
 
@@ -55,7 +53,7 @@ fn parse_line(line: &str) -> Option<CikTicker> {
     let ticker_maybe = split.next();
     let cik_maybe = split.next();
     if ticker_maybe.is_none() || cik_maybe.is_none() {
-        error!("parse error: {:?}", line);
+        log::error!("parse error: {:?}", line);
         return Option::None;
     } else {
         let ticker = ticker_maybe.unwrap();
