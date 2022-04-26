@@ -1,16 +1,16 @@
 use std::collections::HashMap;
 use std::str::from_utf8;
 use futures_util::StreamExt;
-use reqwest::{Client as HttpClient, Response};
-use crate::sec_headers;
+use reqwest::{Response};
 use log::{info, warn, error};
 
 const _SEC_TICKER_URL: &str = "https://www.sec.gov/include/ticker.txt";
 
-pub async fn get_tickers(client: HttpClient) -> Result<Response, Box<dyn std::error::Error>> {
-    Ok(client.get(_SEC_TICKER_URL)
-        .headers(sec_headers())
-        .send().await?)
+pub async fn get_tickers() -> Result<Response, Box<dyn std::error::Error>> {
+    Ok(crate::http_client()?
+        .get("https://www.sec.gov/include/ticker.txt")
+        .send()
+        .await?)
 }
 
 pub async fn parse_tickers(response: Response) -> Result<HashMap<String, u64>, Box<dyn std::error::Error>> {

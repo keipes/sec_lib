@@ -13,13 +13,9 @@ pub async fn client() -> Result<Client, Box<dyn Error>> {
     Ok(client)
 }
 
-pub async fn put_tickers(s3_client: Client, tickers: HashMap<String, u64>) -> Result<(), Box<dyn Error>> {
-    let body: Vec<u8> = serde_json::to_vec(&tickers)?;
-    s3_client.put_object()
-        .bucket("cce-resources")
-        .body(ByteStream::from(body))
-        .key("tickers.json")
-        .send().await?;
+pub async fn put_tickers(tickers: HashMap<u64, Vec<String>>) -> Result<(), Box<dyn Error>> {
+    let bytes = ByteStream::from(serde_json::to_vec(&tickers)?);
+    put_object("cce-resources", "tickers.json", bytes).await?;
     Ok(())
 }
 
