@@ -13,33 +13,30 @@ pub async fn get_tickers() -> Result<Response, Box<dyn std::error::Error>> {
         .await?)
 }
 
-pub async fn parse_tickers(response: Response) -> Result<HashMap<String, u64>, Box<dyn std::error::Error>> {
-    let mut ciks: HashMap<String, u64> = HashMap::new();
-    let mut to_parse: String = String::new();
-    let mut stream = response.bytes_stream();
-    while let Some(item) = stream.next().await {
-        to_parse.push_str(from_utf8(&item.unwrap()).unwrap());
-        while let Some(line_end) = to_parse.find('\n') {
-            let line: String = to_parse.drain(..line_end+1).collect();
-            let ct_maybe = parse_line(line.as_str());
-            if ct_maybe.is_err() {
-                warn!("Error: {:?}", ct_maybe.err().unwrap())
-            } else {
-                let ct = ct_maybe.unwrap();
-                let existing_maybe = ciks.insert(ct.ticker, ct.cik);
-                if existing_maybe.is_some() {
-                    error!("duplicate entry: {:?}", existing_maybe.ok_or(0));
-                    panic!("duplicate entry");
-                }
-            }
+pub async fn parse_tickers(response: Response) -> HashMap<u64, Vec<String>> {
+    let mut ciks: HashMap<u64, Vec<String>> = HashMap::new();
+    let text: String = response.text().await.unwrap();
+    log::info!("Got text.");
+    let mut lines = text.lines();
+    while let Some(line) = lines.next() {
+        let line_parts = parse_line(&line);
+        match line_parts {
+            Some(parts) => update_map(&mut ciks, parts),
+            None => ()
         }
     }
-    if to_parse.len() > 0 {
-        let ct = parse_line(to_parse.as_str()).unwrap();
-        ciks.insert(ct.ticker, ct.cik);
+    log::info!("Built map.");
+    log::info!("CIKs: {:?}", ciks.keys().len());
+    ciks
+}
+
+fn update_map(map: &mut HashMap<u64, Vec<String>>, parts: CikTicker) {
+    if map.contains_key(&parts.cik) {
+        let v = map.get_mut(&parts.cik).unwrap();
+        v.push(parts.ticker);
+    } else {
+        map.insert(parts.cik, vec!(parts.ticker));
     }
-    info!("found {:?} tickers", ciks.len());
-    Ok(ciks)
 }
 
 struct CikTicker {
@@ -53,16 +50,16 @@ impl CikTicker {
     }
 }
 
-fn parse_line(line: &str) -> Result<CikTicker, &'static str> {
+fn parse_line(line: &str) -> Option<CikTicker> {
     let mut split = line.split_whitespace();
     let ticker_maybe = split.next();
     let cik_maybe = split.next();
     if ticker_maybe.is_none() || cik_maybe.is_none() {
         error!("parse error: {:?}", line);
-        Err("parse error")
+        return Option::None;
     } else {
         let ticker = ticker_maybe.unwrap();
         let cik = cik_maybe.unwrap().parse::<u64>().unwrap();
-        Ok(CikTicker::new(ticker, cik))
+        Option::Some(CikTicker::new(ticker, cik))
     }
 }
