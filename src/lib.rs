@@ -52,7 +52,7 @@ mod tests {
             for (label, _) in filer_data.facts.gaap {
                 new_labels.insert(label);
             }
-            log::info!("{}", new_labels.len());
+            log::info!("{} {}", data_file, new_labels.len());
             common_labels = common_labels.union(&new_labels).map(|s| String::from(s)).collect();
         }
 
