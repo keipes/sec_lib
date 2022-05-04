@@ -52,13 +52,14 @@ mod tests {
             for (label, _) in filer_data.facts.gaap {
                 new_labels.insert(label);
             }
+            log::info!("{}", new_labels.len());
             common_labels = common_labels.union(&new_labels).map(|s| String::from(s)).collect();
         }
 
         let mut vec_labels: Vec<String> = common_labels.into_iter().collect();
         vec_labels.sort();
         for label in &vec_labels {
-            log::info!("{:?}", label);
+            // log::info!("{:?}", label);
         }
         // log::info!("{}", serde_json::to_string(&vec_labels).unwrap())
     }

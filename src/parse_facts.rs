@@ -6,12 +6,12 @@ use std::path::Path;
 use serde::{Serialize, Deserialize};
 
 
-pub const MSFT_FACTS: &str = "test-data/CIK0000789019.json";
-pub const FB_FACTS: &str = "test-data/CIK0001326801.json";
-pub const AMZN_FACTS: &str = "test-data/CIK0001018724.json";
-pub const AAPL_FACTS: &str = "test-data/CIK0000320193.json";
-pub const NFLX_FACTS: &str = "test-data/CIK0001065280.json";
-pub const GOOG_FACTS: &str = "test-data/CIK0001652044.json";
+pub const MSFT_FACTS: &str = "resources/test-data/CIK0000789019.json";
+pub const FB_FACTS: &str = "resources/test-data/CIK0001326801.json";
+pub const AMZN_FACTS: &str = "resources/test-data/CIK0001018724.json";
+pub const AAPL_FACTS: &str = "resources/test-data/CIK0000320193.json";
+pub const NFLX_FACTS: &str = "resources/test-data/CIK0001065280.json";
+pub const GOOG_FACTS: &str = "resources/test-data/CIK0001652044.json";
 
 
 /*
