@@ -22,16 +22,64 @@ TODO: They all report all 496 of these GAAP concepts, are these all required?
 > 
 > AccountsReceivableNetCurrent
 > 
+> CapitalLeaseObligations - Unused post-COVID office space?
 > 
-
-> EntityCommonStockSharesOutstanding: Number of shares which exist.
-
+> CommonStockSharesOutstanding
+> 
+> CostOfGoodsAndServicesSold
+> 
+> CostsAndExpenses
+> 
+> CurrentFederalTaxExpenseBenefit
+> 
+> CurrentForeignTaxExpenseBenefit
+> 
+> CurrentIncomeTaxExpenseBenefit
+> 
+> CurrentStateAndLocalTaxExpenseBenefit
+> 
+> DeferredRevenue: Payments for goods or services which the company will deliver at a later time.
+> 
+> Depreciation: Hand-wavy accounting magic to indicate the loss in value of assets the company owns over time.
+> 
+> EarningsPerShareBasic: (net income - preferred dividends) / outstanding shares
+> 
+> EmployeeRelatedLiabilitiesCurrent: Salaries, bonuses, payroll taxes, fringe benefits.
+>
 > EntityPublicFloat: Market value of voting and non-voting shares, computed from average of bid-ask spread.
-
-> "EarningsPerShareBasic" "Earnings Per Share, Basic"
-"The amount of net income (loss) for the period per each share of common stock or unit outstanding during the reporting period."
-> (net income - preferred dividends) / outstanding shares
-
-
-
-
+>
+> Goodwill: Terrible name. When purchasing another company "goodwill" is the amount payed above and beyond the estimated value of the assets acquired. May reflect value from branding, customer base, etc.
+> 
+> GrossProfit: Difference between revenue and cost of goods sold.
+> 
+> IncomeTaxesPaid: Cash paid to governments or agencies as tax on income.
+> 
+> IncomeTaxesPaidNet: IncomeTaxesPaid adjusted for any fine/refund for under/over payment.
+> 
+> InterestExpense: Expense due to interest from bonds, loans, lines of credit, convertible debt.
+> 
+> InventoryNet
+> 
+> InterestPaid
+> 
+> LeaseAndRentalExpense
+> 
+> LeaseCost
+> 
+> LongTermDebt
+> 
+> MarketingExpense
+> 
+> OperatingExpense
+> 
+> PreferredStockSharesOutstanding
+> 
+> PreferredStockValue
+> 
+> ShareBasedCompensation
+> 
+> StockholdersEquity
+> 
+> WeightedAverageNumberOfDilutedSharesOutstanding
+> 
+> WeightedAverageNumberOfSharesOutstandingBasic
