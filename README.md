@@ -10,9 +10,11 @@ A **concept** is a label applied to a specific piece of data, like "AccountsPaya
 An XBRL **fact** is a a 3-tuple of (concept, time, value).
 
 ## Interesting Concepts
-The GAAP taxonomy is large, and companies are unfortunately permitted to create their own custom concepts. This is a curated list of concepts which should be common amongst large filers, and show big-picture information about a company. These should be useful when comparing data across companies.
+The GAAP taxonomy is large, this is a show big-picture information about a company. These should be useful when comparing data across companies.
 
 [MFAANG_Concepts.json](resources/MFAANG_Concepts.json) contains a union of concepts reported by Microsoft, Facebook, Amazon, Apple and Google (Alphabet).
+
+TODO: They all report all 496 of these GAAP concepts, are these all required?
 
 > AccountsPayable 
 >
