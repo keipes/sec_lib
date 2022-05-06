@@ -53,15 +53,16 @@ mod tests {
                 new_labels.insert(label);
             }
             log::info!("{} {}", data_file, new_labels.len());
-            common_labels = common_labels.union(&new_labels).map(|s| String::from(s)).collect();
+            common_labels = common_labels.intersection(&new_labels).map(|s| String::from(s)).collect();
         }
 
         let mut vec_labels: Vec<String> = common_labels.into_iter().collect();
+        log::info!("num common facts: {}", vec_labels.len());
         vec_labels.sort();
         for label in &vec_labels {
             // log::info!("{:?}", label);
         }
-        // log::info!("{}", serde_json::to_string(&vec_labels).unwrap())
+        log::info!("{}", serde_json::to_string(&vec_labels).unwrap())
     }
 
     // #[tokio::test]
