@@ -2,9 +2,7 @@ use std::collections::HashMap;
 use std::fs::File;
 use std::io::BufReader;
 use std::path::Path;
-
 use serde::{Serialize, Deserialize};
-
 
 pub const MSFT_FACTS: &str = "resources/test-data/CIK0000789019.json";
 pub const FB_FACTS: &str = "resources/test-data/CIK0001326801.json";
@@ -13,13 +11,12 @@ pub const AAPL_FACTS: &str = "resources/test-data/CIK0000320193.json";
 pub const NFLX_FACTS: &str = "resources/test-data/CIK0001065280.json";
 pub const GOOG_FACTS: &str = "resources/test-data/CIK0001652044.json";
 
-
 /*
 TODO: Can we enable strict parsing, so we know when an element is not successfully mapped to a data
  structure?
  */
 pub fn open_file(file: &str) -> Filer {
-    let file = File::open(Path::new(AMZN_FACTS)).unwrap();
+    let file = File::open(Path::new(file)).unwrap();
     let mut buf_reader = BufReader::new(file);
     serde_json::from_reader(buf_reader).unwrap()
 }
