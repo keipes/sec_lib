@@ -1,17 +1,20 @@
+use aws_config::meta::region::RegionProviderChain;
+use aws_config::BehaviorVersion;
+use aws_sdk_s3::primitives::ByteStream;
+use aws_sdk_s3::Client;
 use std::collections::HashMap;
 use std::error::Error;
-use aws_sdk_s3::Client;
-use aws_sdk_s3::types::ByteStream;
-use aws_config::meta::region::RegionProviderChain;
 
 const BUCKET: &str = "cce-resources";
 const TICKERS_FILE: &str = "tickers.json";
 const COMPANIES_FILE: &str = "company_names.json";
 
 pub async fn client() -> Result<Client, Box<dyn Error>> {
-    let region_provider = RegionProviderChain::default_provider()
-        .or_else("us-west-2");
-    let config = aws_config::from_env().region(region_provider).load().await;
+    let region_provider = RegionProviderChain::default_provider().or_else("us-west-2");
+    let config = aws_config::defaults(BehaviorVersion::latest())
+        .region(region_provider)
+        .load()
+        .await;
     let client = Client::new(&config);
     Ok(client)
 }
@@ -38,18 +41,24 @@ pub async fn put_company_names(names: HashMap<u64, Vec<String>>) -> Result<(), B
 
 async fn get_object(bucket: &str, key: &str) -> ByteStream {
     let client = client().await.unwrap();
-    client.get_object()
+    client
+        .get_object()
         .bucket(bucket)
         .key(key)
-        .send().await.unwrap().body
+        .send()
+        .await
+        .unwrap()
+        .body
 }
 
 async fn put_object(bucket: &str, key: &str, bytes: ByteStream) -> Result<(), Box<dyn Error>> {
     let client = client().await?;
-    client.put_object()
+    client
+        .put_object()
         .bucket(bucket)
         .key(key)
         .body(bytes)
-        .send().await?;
+        .send()
+        .await?;
     Ok(())
 }

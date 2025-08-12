@@ -1,13 +1,13 @@
-use std::error::Error;
+use reqwest::header::{HeaderMap, ACCEPT_ENCODING, HOST, USER_AGENT};
 use reqwest::{Client, ClientBuilder};
-use reqwest::header::{USER_AGENT, ACCEPT_ENCODING, HOST, HeaderMap};
+use std::error::Error;
 
-pub mod tickers;
 pub mod company_names;
-pub mod resources;
 mod parse_facts;
+pub mod resources;
+pub mod tickers;
 
-fn http_client() -> Result<Client, Box<dyn Error>>{
+fn http_client() -> Result<Client, Box<dyn Error>> {
     let client: Client = ClientBuilder::new()
         .gzip(true)
         .default_headers(sec_headers())
@@ -17,7 +17,12 @@ fn http_client() -> Result<Client, Box<dyn Error>>{
 
 pub fn sec_headers() -> HeaderMap {
     let mut map = HeaderMap::new();
-    map.append(USER_AGENT, "Cash and Cash Equivalents admin@cashandcashequivalents.com".parse().unwrap());
+    map.append(
+        USER_AGENT,
+        "Cash and Cash Equivalents admin@cashandcashequivalents.com"
+            .parse()
+            .unwrap(),
+    );
     map.append(ACCEPT_ENCODING, "gzip, deflate".parse().unwrap());
     map.append(HOST, "www.sec.gov".parse().unwrap());
     map
@@ -25,19 +30,24 @@ pub fn sec_headers() -> HeaderMap {
 
 #[cfg(test)]
 mod tests {
+    use crate::parse_facts::{
+        _open_file, _AAPL_FACTS, _AMZN_FACTS, _FB_FACTS, _GOOG_FACTS, _MSFT_FACTS, _NFLX_FACTS,
+    };
+    use log::LevelFilter;
     use std::collections::{HashMap, HashSet};
     use std::future::Future;
-    use log::LevelFilter;
-    use crate::parse_facts::{AAPL_FACTS, AMZN_FACTS, FB_FACTS, GOOG_FACTS, MSFT_FACTS, NFLX_FACTS, open_file};
 
     /*
     TODO: load a few XBRL docs and see which GAAP labels overlap
      */
     #[test]
     fn it_works() {
-        simple_logger::SimpleLogger::new().with_utc_timestamps()
-            .with_level(LevelFilter::Info).init().unwrap();
-        let amzn = open_file(AMZN_FACTS);
+        simple_logger::SimpleLogger::new()
+            .with_utc_timestamps()
+            .with_level(LevelFilter::Info)
+            .init()
+            .unwrap();
+        let amzn = _open_file(_AMZN_FACTS);
 
         let mut common_labels: HashSet<String> = HashSet::new();
         log::info!("US-GAAP");
@@ -46,14 +56,23 @@ mod tests {
             common_labels.insert(label);
         }
         // Now union with the other companies.
-        for data_file in vec!(FB_FACTS, AAPL_FACTS, NFLX_FACTS, GOOG_FACTS, MSFT_FACTS) {
-            let filer_data = open_file(data_file);
+        for data_file in vec![
+            _FB_FACTS,
+            _AAPL_FACTS,
+            _NFLX_FACTS,
+            _GOOG_FACTS,
+            _MSFT_FACTS,
+        ] {
+            let filer_data = _open_file(data_file);
             let mut new_labels = HashSet::new();
             for (label, _) in filer_data.facts.gaap {
                 new_labels.insert(label);
             }
             log::info!("{} {}", data_file, new_labels.len());
-            common_labels = common_labels.intersection(&new_labels).map(|s| String::from(s)).collect();
+            common_labels = common_labels
+                .intersection(&new_labels)
+                .map(|s| String::from(s))
+                .collect();
         }
 
         let mut vec_labels: Vec<String> = common_labels.into_iter().collect();
